@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+    <div id='grafiek' class="chart" style="height:600px;"></div>
+
+</body>
+<script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
+  <!-- Socket.io-->
+  <script src="https://cdn.socket.io/4.3.2/socket.io.min.js" integrity="sha384-KAZ4DtjNhLChOB/hxXuKqhMLYvx3b5MlT55xPEiNmREKRzeEm+RVPlTnAn0ajQNs" crossorigin="anonymous"></script>
+
+<script>
+    var graph;
+    var data ;
+    var donut;
+    var layout;
+    //var socket = io();
+    /*
+    console.log(socket.connected)
+    socket.on("connect", ()=>{
+            console.log("Connected...!", socket.connected);
+            socket.emit('request_graph', true);
+        });
+    socket.on("graph_logs", (data_graph)=>{
+        console.log("graph_logs", data_graph)
+        //graph = JSON.parse(data_graph.data);
+*/
+
+
+
+
+
+        grafiek = {'data':[{
+                x0 : 3,
+                dx : 0.5,
+                y : [60, 59, 64, 68],
+                name : "Problems",
+                visible : true,
+                showlegend : true,
+                opacity : 1,
+                mode : 'lines+markers',
+                fill : 'tozeroy',
+                fillcolor : 'rgba(204,20,0,.3)',
+                hoverinfo : 'x+y+text',
+
+                hoveron : 'points',
+                textposition : 'top center',
+
+                marker : {
+                    symbol: 'circle-open',
+                    size: 7,
+                    color: 'rgba(102,0,0,1)'
+                },
+
+                line : {
+                    color : 'rgba(204,0,0,1)',
+                    width : 3,
+                    shape : 'spline',
+                    smoothing : 1.3,
+                    dash : 'solid',
+                    simplify : false
+                },
+
+
+            },
+                {
+                    x0: 0,
+                    dx: 0.5,
+                    y: [76, 88, 83],
+                    name: 'Solution',
+                    visible: true,
+                    showlegend: true,
+                    opacity: 1,
+                    mode: 'lines+markers',
+                    fill: 'tozeroy',
+                    fillcolor: 'rgba(0,204,40,.3)',
+                    hoverinfo: 'x+y+text',
+
+                    hoveron: 'points',
+                    textposition: 'top center',
+
+                    marker: {
+                    symbol : 'circle-open',
+                    size : 7,
+                    color : 'rgba(0,102,0,1)'
+                },
+
+                    line : {
+                        color: 'rgba(0,204,0,1)',
+                        width: 3,
+                        shape: 'spline',
+                        smoothing: 1.3,
+                        dash: 'solid',
+                        simplify: false
+                    },
+
+
+                },
+                {
+                    x0 : 1,
+                    dx : 0.5,
+                    y : [83, 79, 75, 67, 60],
+                    name : "Problems",
+                    visible : true,
+                    showlegend : true,
+                    opacity : 1,
+                    mode : 'lines+markers',
+                    fill : 'tozeroy',
+                    fillcolor : 'rgba(204,204,0,.3)',
+                    hoverinfo : 'x+y+text',
+
+                    hoveron : 'points',
+                    textposition : 'top center',
+
+                    marker : {
+                        symbol : 'circle-open',
+                        size : 7,
+                        color : 'rgba(204,102,0,1)'
+                    },
+
+                    line : {
+                        color : 'rgba(204,204,0,1)',
+                        width : 3,
+                        shape : 'spline',
+                        smoothing : 1.3,
+                        dash : 'solid',
+                        simplify : false
+                    },
+
+                }],
+
+    'layout': {
+        showlegend: true,
+        autosize: false,
+        separators: ',',
+        paper_bgcolor: 'rgb(255,255,255,1)',
+        plot_bgcolor: 'rgb(255,255,255,1)',
+        hovermode: 'closest',
+
+        title: {
+            text: 'Zoom fatique'
+        },
+
+        legend: {
+            orientation: 'v',
+            itemsizing: 'constant',
+            itemclick: 'toggle',
+            itemdoubleclick: 'toggleothers',
+
+            title: {
+                text: 'legende:',
+                side: 'top'
+            }
+        },
+
+        margin: {
+            l: 50,
+            r: 110,
+            t: 50,
+            b: 50,
+            autoexpand: false
+        },
+
+
+        xaxis: {
+        type : 'linear',
+
+
+        title : {
+            text : 'Time[min]'
+    }
+    },
+
+        yaxis : {
+            type : 'linear',
+
+            title : {
+                text: 'Concentration[%]'
+            }
+        }
+
+    }}
+
+
+
+
+    labels = ['Intro', 'Problems', 'Solutions', 'Business'];
+
+
+    values=[14,16,28,42]
+    pie = {'data': [
+            {
+                type: 'pie',
+                labels : labels,
+                values : values,
+                pull : [0, 0, 0, 0.1],
+                hoverinfo : 'percent',
+                scalegroup : 'one'
+
+            }]
+        ,
+
+        'layout': {
+        showlegend: true,
+        autosize: false,
+        separators: ',',
+        paper_bgcolor: 'rgb(255,255,255,1)',
+        plot_bgcolor: 'rgb(255,255,255,1)',
+        hovermode: 'closest',
+
+        title: {
+            text: 'Zoom fatique'
+        },
+
+        legend: {
+            orientation: 'v',
+            itemsizing: 'constant',
+            itemclick: 'toggle',
+            itemdoubleclick: 'toggleothers',
+
+            title: {
+                text: 'legende:',
+                side: 'top'
+            }
+        },
+
+        margin: {
+            l: 50,
+            r: 110,
+            t: 50,
+            b: 50,
+            autoexpand: false
+        },
+
+
+        xaxis: {
+        type : 'linear',
+
+
+        title : {
+            text : 'Time[min]'
+    }
+    },
+
+        yaxis : {
+            type : 'linear',
+
+            title : {
+                text: 'Concentration[%]'
+            }
+        }
+
+    }
+    }
+
+
+
+
+
+
+
+
+
+
+        graph = pie;
+
+
+        data = graph.data;
+        layout= graph.layout;
+        const config = {
+            displayModeBar: false
+        }
+        Plotly.newPlot('grafiek', data, layout, config);
+
+
+
+
+</script>
+</html>
